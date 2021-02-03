@@ -1,0 +1,26 @@
+version: "3"
+services:
+  piwigo:
+    image: linuxserver/piwigo
+    network_mode: bridge
+    ports:
+      - 8080:80
+    links:
+      - db
+    volumes:
+      - ./config:/config
+      - ./pictures:/pictures
+
+  db:
+    image: mariadb:latest
+    network_mode: bridge
+    environment:
+      MYSQL_USER: "piwigo"
+      MYSQL_PASSWORD: "<PASSWORD>"
+      MYSQL_DATABASE: "piwigo"
+      MYSQL_ROOT_PASSWORD: "<ROOTPASSWORD>"
+      MYSQL_RANDOM_ROOT_PASSWORD: "false"
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+    restart: unless-stopped
